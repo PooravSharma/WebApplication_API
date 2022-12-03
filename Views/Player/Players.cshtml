@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MVC_WebApplication.Models.Players>
+
+@{
+    ViewData["Title"] = "Players";
+}
+
+<h1>Players</h1>
+
+<p>
+    <a asp-action="PlayersCreate">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Primary_Character)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Primary_Character_PlayTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Secondary_Character)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Secondary_Character_PlayTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Primary_Character)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Primary_Character_PlayTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Secondary_Character)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Secondary_Character_PlayTime)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "PlayersEdit", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "PlayersDetails", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "PlayersDelete", new { id=item.Id })
+            </td>
+        </tr>
+            
+}
+        <tr>
+            <td>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+
+    </tbody>
+</table>

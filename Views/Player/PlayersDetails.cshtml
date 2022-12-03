@@ -1,0 +1,60 @@
+﻿@model MVC_WebApplication.Models.Players
+
+@{
+    ViewData["Title"] = "PlayersDetails";
+}
+
+<h1>PlayersDetails</h1>
+
+<div>
+    <h4>Players</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-15">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-15">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rank)
+        </dt>
+        <dd class = "col-sm-15">
+            @Html.DisplayFor(model => model.Rank)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Primary_Character)
+        </dt>
+        <dd class="col-sm-15">
+            @Html.DisplayFor(model => model.Primary_Character)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Primary_Character_PlayTime)
+        </dt>
+        <dd class="col-sm-15">
+            @Html.DisplayFor(model => model.Primary_Character_PlayTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Secondary_Character)
+        </dt>
+        <dd class="col-sm-15">
+            @Html.DisplayFor(model => model.Secondary_Character)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Secondary_Character_PlayTime)
+        </dt>
+        <dd class="col-sm-15">
+            @Html.DisplayFor(model => model.Secondary_Character_PlayTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "PlayersEdit", new { id = Model.Id}) |
+    <a asp-action="Players">Back to List</a>
+</div>
