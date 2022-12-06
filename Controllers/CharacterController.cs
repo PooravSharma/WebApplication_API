@@ -15,36 +15,28 @@ namespace MVC_WebApplication.Controllers
 
 
         private readonly ICharactersServices characterServices;
+        private readonly IPlayersServices playersServices;
 
-        public CharacterController(ICharactersServices characterServices)
+        public CharacterController(ICharactersServices characterServices, IPlayersServices playersServices)
         {
             this.characterServices = characterServices;
+            this.playersServices = playersServices;
         }
 
-
-        // GET: api/<CharacterController>
-        [HttpGet("Get all Characters")]
-        public ActionResult<List<Characters>> GetAll()
+        [HttpGet("GetCharacters")]
+        public ActionResult Characters()
         {
-            return characterServices.GetAll();
+            return View(characterServices.GetSortedPlayTime());
         }
 
-        // GET api/<CharacterController>/5
-        [HttpGet("Get specific Character using {id}")]
-        public ActionResult<Characters> Get(int id)
+        public ActionResult CharactersCreate()
         {
-            var character = characterServices.Get_with_ID(id);
-            if (character == null)
-            {
-                return NotFound($"Character with the ID = {id} not found");
-            }
-            return character;
 
+            return View();
         }
 
-        // POST api/<CharacterController>
-        [HttpPost("Add a Character")]
-        public ActionResult<Characters> Post([FromBody] Characters character)
+        [HttpPost("CreateCharacter")]
+        public ActionResult<Characters> CreatePost([FromForm] Characters character)
         {
             Characters existingCharacter = characterServices.Get_with_ID(character.Id);
             if (existingCharacter != null)
@@ -52,68 +44,76 @@ namespace MVC_WebApplication.Controllers
                 return NotFound($"Character with the id = " +existingCharacter.Id+ " already exists");
             }
             characterServices.Create(character);
-            return CreatedAtAction(nameof(Get), new { id = character.Id }, character);
+            return RedirectToAction("Characters");
 
         }
 
-        // PUT api/<CharacterController>/5
-        [HttpPut("Update using {id}")]
-        public ActionResult Put(int id, [FromBody] Characters character)
+        [HttpGet("GetCharacterEditPost")]
+        public ActionResult CharactersEdit(int Id)
         {
-            var existingPlayer = characterServices.Get_with_ID(id);
+            var character = characterServices.Get_with_ID(Id);
 
-            if (existingPlayer == null)
-            {
-                return NotFound($"Character with Id = {id} not found");
-            }
 
-            return NoContent();
+            return View(character);
         }
 
-        // DELETE api/<CharacterController>/5
-        [HttpDelete("Delete using {id}")]
-        public ActionResult Delete(int id)
+        
+        [HttpPost("CharacterEditPost")]
+        public ActionResult EditPost([FromForm] Characters character)
+        {
+            int id = character.Id;
+            
+            characterServices.Update_with_ID(id, character);
+           
+            return RedirectToAction("Characters");
+        }
+
+        [HttpGet("CharacterDetails")]
+        public ActionResult CharactersDetails(int Id)
+        {
+            var character = characterServices.Get_with_ID(Id);
+            return View(character);
+        }
+
+        [HttpGet("GetCharacterDeletePost")]
+        public ActionResult CharactersDelete(int id)
         {
             var character = characterServices.Get_with_ID(id);
-            if (character == null)
-            {
-                return NotFound($"Players with Id = {id} not found");
-            }
 
-            characterServices.Delete_with_ID(character.Id);
-
-            return Ok($"Character with Id = {id} deleted");
+            return View(character);
         }
 
-        // DELETE api/<CharacterController>/5
-        [HttpDelete("Delete Multiple")]
-        public ActionResult DeleteMultiple(int[] characterIds)
+        [HttpPost("CharacterDeletePost")]
+        public ActionResult DeletePost([FromForm] Characters character)
         {
-            foreach (var id in characterIds)
+            int id = character.Id;
+            var characters = characterServices.Get_with_ID(id); 
+            List<Players> playerList = playersServices.GetAll();
+            foreach (var player in playerList)
             {
-                var character = characterServices.Get_with_ID(id);
-                if (character == null)
+                if (player.Primary_Character == characters.Name)
                 {
-                    return NotFound($"Character with Id = {id} not found");
+                    player.Primary_Character = "deleted";
+                    player.Primary_Character_PlayTime = 0;
+
                 }
+                if (player.Secondary_Character == characters.Name)
+                {
+                    player.Secondary_Character = "deleted";
+                    player.Secondary_Character_PlayTime = 0;
 
-                characterServices.Delete_with_ID(character.Id);
-
+                }
+                playersServices.Update_with_ID(player.Id, player);
             }
-            return NoContent();
-        }
+            characterServices.Delete_with_ID(id);
 
-        [HttpGet("Get all Characters Sorted PlayTime")]
-        public ActionResult<List<Characters>> GetSortedPlaytimel()
-        {
-            return characterServices.GetSortedPlayTime();
+            return RedirectToAction("Characters");
         }
 
 
-        public IActionResult Characters()
-        {
-            return View(characterServices.GetSortedPlayTime());
-        }
+       
+
+
     }
 
 }

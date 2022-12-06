@@ -7,7 +7,7 @@
 <h1>Characters</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CharactersCreate">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +49,9 @@
                     <img src="@item.Avatar" height="200" width="200">
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Edit", "CharactersEdit", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "CharactersDetails", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "CharactersDelete", new { id=item.Id })
             </td>
         </tr>
 }

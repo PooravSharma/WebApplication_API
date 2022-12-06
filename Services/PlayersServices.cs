@@ -29,7 +29,7 @@ namespace MVC_WebApplication.Services
 
         public void Delete_with_ID(int id)
         {
-          
+
             _Players.DeleteOne(player => player.Id == id);
 
         }
@@ -38,20 +38,40 @@ namespace MVC_WebApplication.Services
         {
             return _Players.Find(player => player.Id == id).FirstOrDefault();
         }
-        
+
         public void Update_with_ID(int id, Players player)
         {
             _Players.ReplaceOne(player => player.Id == id, player);
 
         }
-    public List<Players> Get_Player_Rank()
+        public List<Players> Get_Player_Rank()
         {
             var player = _Players.Find(players => true).ToList();
             var sortedplayers = player.OrderBy(player => player.Rank).ToList();
             return sortedplayers;
         }
 
+        public void PlayerRanker(Players players)
+        {
+            List<Players> existingPlayers = _Players.Find(players => true).ToList();
+            var sortedExistingPlayers = existingPlayers.OrderBy(player => player.Rank).ToList();
+            foreach (var existPlayer in sortedExistingPlayers)
+            {
+                if (existPlayer.Rank.Equals(players.Rank) && existPlayer.Id != players.Id)
+                {
+                    int id = existPlayer.Id;
+                    existPlayer.Rank = existPlayer.Rank + 1;
+                    _Players.ReplaceOne(existPlayer => existPlayer.Id == id, existPlayer);
+                    players = existPlayer;
+                }
 
+            }
+        }
+        public List<Players> GetAll()
+        {
+            return _Players.Find(players => true).ToList();
+
+        }
     }
 
 }

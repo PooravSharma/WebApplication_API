@@ -17,31 +17,18 @@ namespace MVC_WebApplication.Controllers
             this.playersServices=playersServices;
             this.characterServices=characterServices;
         }
-        // GET: api/<PlayerController>
 
 
-
-
-
-
-
-        [HttpGet("GetPlayers")]
+       [HttpGet("GetPlayers")]
         public ActionResult Players()
         {
-            /*   using (var client = new HttpClient())
-               {
-                   client.BaseAddress = new Uri("http://localhost:61438/api/");
-                   //HTTP GET
-                   var responseTask = client.GetAsync("student");
-                   responseTask.Wait();
-
-                   var result = responseTask.Result;
-   */
+            
             return View(playersServices.Get_Player_Rank());
 
         }
         //[HttpPost("GetCreatePost")]
-        public ActionResult PlayersCreate() {
+        public ActionResult PlayersCreate()
+        {
 
             return View();
         }
@@ -50,32 +37,74 @@ namespace MVC_WebApplication.Controllers
         [HttpPost("CreatePost")]
         public ActionResult CreatePost([FromForm] Players players)
         {
+            Players existingPlayer = playersServices.Get_with_ID(players.Id);
+            List<Characters> characterList = characterServices.GetAll();
+            Characters characterName = characterList.Find((character => character.Name == players.Primary_Character));
+            Characters characterName2 = characterList.Find((character => character.Name == players.Secondary_Character));
+            if (existingPlayer != null)
+            {
 
+                return NotFound("Players with the id = "+ players.Id +"  already exists");
+
+            }
+
+            if (players.Rank.Equals(0))
+            {
+                return NotFound($"Players with rank = 0 cannot be made");
+            }
+            if (characterName is null)
+            {
+                return NotFound($"That Primary Character does not exist");
+            }
+            if (characterName2 is null)
+            {
+                return NotFound($"That Secondary Character does not exist");
+            }
             playersServices.Create(players);
+            playersServices.PlayerRanker(players);
 
             return RedirectToAction("Players");
 
         }
 
         [HttpGet("GetEditPost")]
-        public ActionResult PlayersEdit(int id)
+        public ActionResult PlayersEdit(int Id)
         {
-            var players = playersServices.Get_with_ID(id);
+            var players = playersServices.Get_with_ID(Id);
+
+
             return View(players);
         }
 
         [HttpPost("EditPost")]
-        public ActionResult EditPost(int id, [FromForm] Players players)
+        public ActionResult EditPost([FromForm] Players players)
         {
-
+            int id = players.Id;
+            var existingPlayer = playersServices.Get_with_ID(id);
+            List<Characters> characterList = characterServices.GetAll();
+            Characters characterName = characterList.Find((character => character.Name == players.Primary_Character));
+            Characters characterName2 = characterList.Find((character => character.Name == players.Secondary_Character));
+            if (existingPlayer.Rank.Equals(0))
+            {
+                return NotFound($"Players with rank = 0 cannot be made");
+            }
+            if (characterName is null)
+            {
+                return NotFound($"That Primary Character does not exist");
+            }
+            if (characterName2 is null)
+            {
+                return NotFound($"That Secondary Character does not exist");
+            }
             playersServices.Update_with_ID(id, players);
+            playersServices.PlayerRanker(players);
             return RedirectToAction("Players");
         }
 
         [HttpGet("PlayerDetails")]
-        public ActionResult PlayersDetails(int id)
+        public ActionResult PlayersDetails(int Id)
         {
-            var players = playersServices.Get_with_ID(id);
+            var players = playersServices.Get_with_ID(Id);
             return View(players);
         }
 
@@ -83,12 +112,14 @@ namespace MVC_WebApplication.Controllers
         public ActionResult PlayersDelete(int id)
         {
             var players = playersServices.Get_with_ID(id);
+
             return View(players);
         }
 
         [HttpPost("DeletePost")]
-        public ActionResult DeletePost(int id)
+        public ActionResult DeletePost([FromForm] Players players)
         {
+            int id = players.Id;
             playersServices.Delete_with_ID(id);
             return RedirectToAction("Players");
         }

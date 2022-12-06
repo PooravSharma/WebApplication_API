@@ -55,9 +55,11 @@
         </dd>
     </dl>
     
-    <form asp-action="DeletePost">
-        <input type="hidden" asp-for="Id"/>
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Players">Back to List</a>
+    <form asp-action="DeletePost">        
+        <input type="hidden" asp-for= "Id" />
+        <div class="form-group">
+        <input type="submit" value="DeletePost" class="btn btn-danger" />
+        </div>|      <a asp-action="Players">Back to List</a>
+       
     </form>
 </div>

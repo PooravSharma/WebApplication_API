@@ -24,10 +24,10 @@ namespace MVC_WebApplication.Services
 
         }
 
-        public string Delete_with_ID(int id)
+        public void Delete_with_ID(int id)
         {
             _Characters.DeleteOne(character => character.Id == id);
-            return "Deleted";
+      
         }
 
         public List<Characters> GetAll()
@@ -41,10 +41,10 @@ namespace MVC_WebApplication.Services
             return _Characters.Find(character => character.Id == id).FirstOrDefault();
         }
 
-        public string Update_with_ID(int id, Characters character)
+        public void Update_with_ID(int id, Characters character)
         {
             _Characters.ReplaceOne(character => character.Id == id, character);
-            return ("Player with Id = "+character.Id+ " has been updated");
+          
         }
 
         public List<Characters> GetSortedPlayTime()

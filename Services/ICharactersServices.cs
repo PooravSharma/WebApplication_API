@@ -9,9 +9,9 @@ namespace MVC_WebApplication.Services
         Characters Get_with_ID(int id);
         Characters Create(Characters character);
 
-        string Update_with_ID(int id, Characters character);
+        void Update_with_ID(int id, Characters character);
 
-        string Delete_with_ID(int id);
+        void Delete_with_ID(int id);
 
         List<Characters> GetSortedPlayTime();
     }
