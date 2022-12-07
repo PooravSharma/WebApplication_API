@@ -14,15 +14,15 @@ namespace MVC_WebApplication.Controllers
         private readonly ICharactersServices characterServices;
         public PlayerController(IPlayersServices playersServices, ICharactersServices characterServices)
         {
-            this.playersServices=playersServices;
-            this.characterServices=characterServices;
+            this.playersServices = playersServices;
+            this.characterServices = characterServices;
         }
 
 
-       [HttpGet("GetPlayers")]
+        [HttpGet("GetPlayers")]
         public ActionResult Players()
         {
-            
+
             return View(playersServices.Get_Player_Rank());
 
         }

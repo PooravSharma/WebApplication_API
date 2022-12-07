@@ -10,13 +10,14 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IPlayersServices, PlayersServices>();
 builder.Services.AddTransient<ICharactersServices, CharactersServices>();
+builder.Services.AddTransient<IAdminUserService, AdminUserService>();
 
 builder.Services.Configure<Assessment2DatabaseSetting>(
                 builder.Configuration.GetSection(nameof(Assessment2DatabaseSetting)));
 
 builder.Services.AddSingleton<IAssessment2DatabaseSetting>(sp =>
 sp.GetRequiredService<IOptions<Assessment2DatabaseSetting>>().Value);
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 
@@ -44,3 +45,4 @@ app.MapControllerRoute(
 
 
 app.Run();
+           

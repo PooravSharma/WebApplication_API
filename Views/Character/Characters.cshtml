@@ -1,14 +1,32 @@
 ﻿@model IEnumerable<MVC_WebApplication.Models.Characters>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    
+    bool loggedIn = false;
+    foreach (var request in HttpContextAccessor.HttpContext.Request.Cookies)
+    {
+        if (@request.Key =="True" && request.Value =="LoggedIn")
+        {
+            loggedIn = true;
+        }
+
+    }
+
+}
 
 @{
     ViewData["Title"] = "Characters";
 }
 
 <h1>Characters</h1>
-
-<p>
-    <a asp-action="CharactersCreate">Create New</a>
-</p>
+@if (loggedIn)
+{
+    <p>
+        <a asp-action="CharactersCreate">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -48,12 +66,15 @@
             <td>
                     <img src="@item.Avatar" height="200" width="200">
             </td>
+@if (loggedIn){
             <td>
                     @Html.ActionLink("Edit", "CharactersEdit", new { id=item.Id }) |
                     @Html.ActionLink("Details", "CharactersDetails", new { id=item.Id }) |
                     @Html.ActionLink("Delete", "CharactersDelete", new { id=item.Id })
             </td>
-        </tr>
+      
+}  
+</tr>
 }
     </tbody>
 </table>

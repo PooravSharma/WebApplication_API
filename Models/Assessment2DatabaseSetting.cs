@@ -8,5 +8,6 @@ namespace MVC_WebApplication.Models
         public string CharactersCollectionName { get; set; } = null!;
         public string ConnectionString { get; set; } = null!;
         public string DatabaseName { get; set; } = null!;
+        public string AdminUserCollection { get; set; } = null!;
     }
 }

@@ -1,15 +1,31 @@
 ﻿@model IEnumerable<MVC_WebApplication.Models.Players>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+@{    
+    bool loggedIn = false;
+    foreach (var request in HttpContextAccessor.HttpContext.Request.Cookies)
+    {
+        if (@request.Key =="True" && request.Value =="LoggedIn")
+        {
+            loggedIn = true;
+        }
+
+    }
+}
 
 @{
     ViewData["Title"] = "Players";
 }
 
 <h1>Players</h1>
-
-<p>
-    <a asp-action="PlayersCreate">Create New</a>
-</p>
-<table class="table">
+    @if (loggedIn)
+    {
+        <p>
+            <a asp-action="PlayersCreate">Create New</a>
+        </p>
+    }
+    <table class="table">
     <thead>
         <tr>
             <th>
@@ -60,11 +76,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Secondary_Character_PlayTime)
             </td>
+   @if (loggedIn)
+    {
             <td>
                     @Html.ActionLink("Edit", "PlayersEdit", new { id=item.Id }) |
                     @Html.ActionLink("Details", "PlayersDetails", new { id=item.Id }) |
                     @Html.ActionLink("Delete", "PlayersDelete", new { id=item.Id })
             </td>
+    }
         </tr>
             
 }

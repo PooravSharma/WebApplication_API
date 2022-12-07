@@ -6,6 +6,7 @@
         string CharactersCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
+        string AdminUserCollection { get; set; }
 
     }
 }
